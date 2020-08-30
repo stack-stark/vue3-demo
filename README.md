@@ -1,24 +1,27 @@
-# vue-four
+# vue3的demo
 
-## Project setup
-```
-yarn install
-```
+## 正式开发前需要完成的内容
+ - [√] 1.配置打包参数
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+ - [√] 2.配置各环境(test,prod)
 
-### Compiles and minifies for production
-```
-yarn build
-```
+ - [√] 3.开发时代理处理
 
-### Lints and fixes files
-```
-yarn lint
-```
+ - [√] 4.antd引入
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+ - [x] 5.http请求封装
+
+## 开发时需要封装的组件or功能
+
+ - [x] 1.路由tab缓存
+
+ - [x] 2.菜单及路由权限处理
+
+ - [x] 3.通用表格组件封装
+
+ - [x] 4.上传组件封装
+
+ - [x] 5.websocket封装
+
+ - [x] 6.打包可接受主题色参数
+
