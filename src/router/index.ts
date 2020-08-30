@@ -5,7 +5,7 @@ import Desktop from '../layouts/Desktop.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import('@/views/Home.vue'),
+    component: () => import(/* webpackPrefetch: true */ '@/views/Home.vue'),
     name: 'Home',
   },
   {
@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/Dashboard.vue'),
+        component: () => import(/* webpackPrefetch: true */ '@/views/dashboard/Dashboard.vue'),
         name: 'Dashboard',
         meta:{
           keepAlive: true
