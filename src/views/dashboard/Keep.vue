@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "Keep",
+  name: "keep",
   data() {
     return {
       value: 123,

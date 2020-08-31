@@ -24,7 +24,7 @@ module.exports = {
       .use(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
     config
-      .when(process.env.NODE_ENV !== 'production', //正式环境打包不需要打包分析
+      .when(process.env.NODE_ENV !== 'development', //开发环境不需要打包分析
         config => {
           config
             .plugin('webpack-bundle-analyzer')

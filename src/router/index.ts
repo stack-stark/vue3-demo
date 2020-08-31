@@ -1,38 +1,46 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
-import Desktop from '../layouts/Desktop.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import(/* webpackPrefetch: true */ '@/views/Home.vue'),
+    component: Home,
     name: 'Home',
   },
   {
+    path: '/404',
+    component: () => import('@/views/system-status-pages/notFound.vue'),
+    name: 'notFound',
+  },
+  {
+    path: '/500',
+    component: () => import('@/views/system-status-pages/serverWrong.vue'),
+    name: 'serverWrong',
+  },
+  {
     path: '/index',
-    component: Desktop,
-    redirect: '/',
+    component: () => import(/* webpackPrefetch: true */ '@/layouts/desktop.vue'),
     children: [
       {
         path: 'dashboard',
-        component: () => import(/* webpackPrefetch: true */ '@/views/dashboard/Dashboard.vue'),
-        name: 'Dashboard',
+        component: () => import('@/views/dashboard/dashboard.vue'),
+        name: 'dashboard',
         meta:{
-          keepAlive: true
+          keepAlive: true //是否进行路由缓存
         }
       },
       {
         path: 'table',
-        component: () => import('@/views/Table.vue'),
-        name: 'TableOne',
+        component: () => import('@/views/dashboard/table.vue'),
+        name: 'table',
         meta:{
           keepAlive: false
         }
       },
       {
         path: 'keep',
-        component: () => import('@/views/dashboard/Keep.vue'),
-        name: 'Keep',
+        component: () => import('@/views/dashboard/keep.vue'),
+        name: 'keep',
         meta:{
           keepAlive: true
         }
