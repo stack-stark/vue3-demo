@@ -3,8 +3,14 @@ const webpack = require('webpack');
 module.exports = {
   devServer: {
     proxy: {
-      '/rest': { //这里最好有一个 /
-        target: 'http://uat.panpartner.com/', // 后台接口域名
+      '/rest': { 
+        target: 'http://127.0.0.1:80', // 后台接口域名
+        ws: true, //如果要代理 websockets，配置这个参数
+        secure: false, // 如果是https接口，需要配置这个参数
+        changeOrigin: true, //是否跨域
+      },
+      '/api': { 
+        target: 'http://127.0.0.1:80', // 后台接口域名
         ws: true, //如果要代理 websockets，配置这个参数
         secure: false, // 如果是https接口，需要配置这个参数
         changeOrigin: true, //是否跨域

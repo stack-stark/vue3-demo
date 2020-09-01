@@ -13,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'notFound',
   },
   {
+    path: '/403',
+    component: () => import('@/views/system-status-pages/notAuthorized.vue'),
+    name: 'notAuthorized',
+  },
+  {
     path: '/500',
     component: () => import('@/views/system-status-pages/serverWrong.vue'),
     name: 'serverWrong',

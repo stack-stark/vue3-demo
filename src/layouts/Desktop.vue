@@ -8,17 +8,17 @@
     >
       <div class="logo" />
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="state.selectedKeys">
-        <a-menu-item key="1">
+        <a-menu-item key="1" @click="toPage('./table', '1')">
           <user-outlined />
-          <router-link :to="'./table'">table</router-link>
+          table
         </a-menu-item>
-        <a-menu-item key="2">
+        <a-menu-item key="2"  @click="toPage('./table', '2')">
           <video-camera-outlined />
-          <router-link :to="'./dashboard'">dashboard</router-link>
+          dashboard
         </a-menu-item>
-        <a-menu-item key="3">
+        <a-menu-item key="3"  @click="toPage('./table', '3')">
           <upload-outlined />
-          <router-link :to="'./keep'">table</router-link>
+          keep
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -41,7 +41,7 @@
       </a-layout-header>
 
       <!-- 路由缓存选项卡 -->
-      <RouterTabs />
+      <routerTabs />
       <!-- 路由缓存选项卡 -->
 
       <a-layout-content
@@ -67,8 +67,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-import RouterTabs from "../components/router-tabs/RouterTabs.vue";
-
+import routerTabs from "@/components/router-tabs/routerTabs.vue";
+import Router from '../router'
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -84,7 +84,7 @@ export default defineComponent({
     UploadOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    RouterTabs,
+    routerTabs,
   },
   data() {
     return {};
@@ -107,8 +107,18 @@ export default defineComponent({
       newTabIndex: 0,
     });
 
+    /**
+     * 路由跳转
+     */
+    const toPage = (page: string, pageKey: string): void => {
+          state.selectedKeys = [pageKey] //设置选中的key
+          // todo路由缓存起来
+          Router.push(page);
+    }
+
     return {
       state,
+      toPage
     };
   },
 });
