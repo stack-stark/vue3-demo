@@ -1,5 +1,3 @@
-import { ActionTree, Action } from 'vuex'
-
 interface RouterCacheObject {
     key: string;
     name: string;
@@ -13,6 +11,12 @@ interface StateFace {
 
 const state: StateFace = {
     routerCacheArray: []
+}
+
+const getters = {                //getters相当于是state的计算属性，如果你需要将变量的值进行计算，然后输出，写这里
+    routerCacheData (state: StateFace) {
+        return state.routerCacheArray
+    }
 }
 
 const mutations = {
@@ -37,5 +41,6 @@ export default {
     namespaced: true,
     state,
     mutations,
+    getters,
     actions
 }

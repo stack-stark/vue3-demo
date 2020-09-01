@@ -12,11 +12,11 @@
           <user-outlined />
           table
         </a-menu-item>
-        <a-menu-item key="2"  @click="toPage('./table', '2')">
+        <a-menu-item key="2"  @click="toPage('./dashboard', '2')">
           <video-camera-outlined />
           dashboard
         </a-menu-item>
-        <a-menu-item key="3"  @click="toPage('./table', '3')">
+        <a-menu-item key="3"  @click="toPage('./keep', '3')">
           <upload-outlined />
           keep
         </a-menu-item>
@@ -111,6 +111,8 @@ export default defineComponent({
      * 路由跳转
      */
     const toPage = (page: string, pageKey: string): void => {
+      console.log(page);
+      console.log(pageKey);
           state.selectedKeys = [pageKey] //设置选中的key
           // todo路由缓存起来
           Router.push(page);
