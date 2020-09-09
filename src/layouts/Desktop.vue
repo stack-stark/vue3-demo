@@ -6,20 +6,18 @@
       :trigger="null"
       collapsible
     >
-      <div class="logo" />
+      <div class="logo" @click="clear" />
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="state.selectedKeys">
-        <a-menu-item key="1" @click="toPage('./table', '1')">
-          <user-outlined />
-          table
+        <a-menu-item key="1" @click="toPage('/index/table', 'TableOne','表格')">
+          <user-outlined />表格
         </a-menu-item>
-        <a-menu-item key="2"  @click="toPage('./dashboard', '2')">
-          <video-camera-outlined />
-          dashboard
+        <a-menu-item key="2" @click="toPage('/index/dashboard','dashboard','工作桌面')">
+          <video-camera-outlined />工作桌面
         </a-menu-item>
-        <a-menu-item key="3"  @click="toPage('./keep', '3')">
-          <upload-outlined />
-          keep
+        <a-menu-item key="3" @click="toPage('/index/keep', 'keep','保持状态')">
+          <upload-outlined />保持状态
         </a-menu-item>
+        <a-menu-item v-for="(item, to) in routerCacheKeyArray" :key="to">{{item}}</a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout :style="{ marginLeft: state.collapsed ?'80px':'200px' }">
@@ -45,17 +43,16 @@
       <!-- 路由缓存选项卡 -->
 
       <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '88vh',maxHeight: '88vh' ,'overflow-y': 'auto' }"
+        :style="{ margin: '24px 16px', 
+                padding: '24px', 
+                background: '#fff', 
+                minHeight: '88vh',
+                maxHeight: '88vh' ,
+                'overflow-y': 'auto' }"
       >
         <div class="content">
-          <!-- <router-view v-slot="{ Component }" >
-            <keep-alive v-if="$route.meta.keepAlive">
-              <component :is="Component" />
-            </keep-alive>
-            <component :is="Component" v-if="!$route.meta.keepAlive"/>
-          </router-view>-->
           <router-view v-slot="{ Component }">
-            <keep-alive>
+            <keep-alive :include="routerCacheKeyArray">
               <component :is="Component" />
             </keep-alive>
           </router-view>
@@ -66,9 +63,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive } from "vue";
 import routerTabs from "@/components/router-tabs/routerTabs.vue";
-import Router from '../router'
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -76,6 +72,17 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons-vue";
+import { useStore } from "vuex";
+
+interface StateObjectType {
+  collapsed: boolean;
+  selectedKeys: Array<string>;
+  activeKey: string;
+  // routerCacheKeyArray: Array<string>;
+}
+
+import _ from "lodash";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -86,41 +93,53 @@ export default defineComponent({
     MenuFoldOutlined,
     routerTabs,
   },
-  data() {
-    return {};
-  },
+
   setup() {
-    const state = reactive({
+    const state: StateObjectType = reactive({
       collapsed: false,
       selectedKeys: ["1"],
-      panes: [
-        { title: "Tab 1", content: "Content of Tab 1", key: "1" },
-        { title: "Tab 2", content: "Content of Tab 2", key: "2" },
-        {
-          title: "Tab 3",
-          content: "Content of Tab 3",
-          key: "3",
-          closable: false,
-        },
-      ],
       activeKey: "1",
-      newTabIndex: 0,
     });
+
+    const store = useStore();
+    const router = useRouter();
+
+    onMounted(() => {
+      console.log(store);
+    });
+
+    const routerCacheKeyArray = computed(() => {
+      return store.state.routerCache.routerCacheKeyArray;
+    });
+
+    /**
+     * 设置路由缓存
+     */
+    const setCache = (page: string, pageKey: string, name: string): void => {
+      store.commit("routerCache/SET_ACTIVE_TAB_KEY", pageKey);
+      if (_.indexOf(store.state.routerCache.routerCacheKeyArray, pageKey) === -1) {
+        store.commit("routerCache/ADD_ROUTER_CACHE", {
+          key: pageKey,
+          name: name,
+          path: page,
+        });
+      } 
+      console.log(store.state.routerCache.activeTabKey);
+    };
 
     /**
      * 路由跳转
      */
-    const toPage = (page: string, pageKey: string): void => {
-      console.log(page);
-      console.log(pageKey);
-          state.selectedKeys = [pageKey] //设置选中的key
-          // todo路由缓存起来
-          Router.push(page);
-    }
+    const toPage = (page: string, pageKey: string, name: string): void => {
+      state.selectedKeys = [pageKey];
+      setCache(page, pageKey, name);
+      router.push(page);
+    };
 
     return {
       state,
-      toPage
+      toPage,
+      routerCacheKeyArray,
     };
   },
 });

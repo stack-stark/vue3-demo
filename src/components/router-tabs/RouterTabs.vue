@@ -1,24 +1,39 @@
 <template>
   <div class="tabs">
-    <div class="tabs-item" @click="toPage('./table', 'table')" v-bind:class="{ 'tabs-item-active': state.activeKey == 'table' }">
-      <span class="item-span">table</span>
+    <div
+      class="tabs-item"
+      @click="toPage('/', 'index')"
+      v-bind:class="{ 'tabs-item-active': state.activeKey == 'index' }"
+    >
+      <span class="item-span">主页</span>
       <CloseOutlined />
     </div>
-    <div class="tabs-item" @click="toPage('./dashboard', 'dashboard')" v-bind:class="{ 'tabs-item-active': state.activeKey == 'dashboard' }">
-      <span class="item-span">桌面</span>
-      <CloseOutlined />
-    </div>
-    <div class="tabs-item" @click="toPage('./keep', 'keep')" v-bind:class="{ 'tabs-item-active': state.activeKey == 'keep' }">
-      <span class="item-span">保持状态</span>
-      <CloseOutlined />
+
+    <div
+      class="tabs-item"
+      v-for="(item, index) in routerCacheArray"
+      :key="index"
+      @click="toPage(item.path, item.key)"
+      v-bind:class="{ 'tabs-item-active': state.activeKey == item.key }"
+    >
+      <span class="item-span">{{item.name}}</span>
+      <span @click.stop="closeTab(index, item.path)">
+        <CloseOutlined />
+      </span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive } from "vue";
 import { CloseOutlined } from "@ant-design/icons-vue";
-import Router from "@/router";
+import { useStore } from "vuex";
+import {
+  RouteLocationNormalizedLoaded,
+  Router,
+  useRoute,
+  useRouter,
+} from "vue-router";
 
 export default defineComponent({
   name: "routerTabs",
@@ -26,29 +41,63 @@ export default defineComponent({
     CloseOutlined,
   },
   setup() {
+    const store = useStore();
+    const router: Router = useRouter();
+    const route: RouteLocationNormalizedLoaded = useRoute();
+
     const state = reactive({
-      activeKey: "table",
+      activeKey: "index",
+      routerCacheArray: [],
+    });
+
+    onMounted(() => {
+      state.routerCacheArray = store.state.routerCache.routerCacheArray;
     });
 
     /**
      * 设置当前活跃页面key
      */
     const setActiveKey = (key: string): void => {
-      state.activeKey = key;
+      store.commit("routerCache/SET_ACTIVE_TAB_KEY", key);
     };
+
+    const routerCacheArray = computed(() => {
+      return store.state.routerCache.routerCacheArray;
+    });
 
     /**
      * 路由跳转
      */
     const toPage = (page: string, key: string): void => {
-      Router.push(page);
+      router.push(page);
       setActiveKey(key);
+    };
+
+    /**
+     * 判断当前tab是否是当前路由,是的话就关闭
+     */
+    const whetherRouterBack = (fullPath: string): void => {
+      if (route.fullPath == fullPath) {
+        router.back();
+      }
+    };
+
+    /**
+     * 关闭tab路由缓存
+     */
+    const closeTab = (index: number, fullPath: string): void => {
+      console.log(index);
+      store.commit("routerCache/CLEAR_ROUTER_CACHE", index);
+      console.log(store.state.routerCache.routerCacheKeyArray);
+      whetherRouterBack(fullPath);
     };
 
     return {
       toPage,
       state,
-      setActiveKey
+      setActiveKey,
+      closeTab,
+      routerCacheArray,
     };
   },
 });

@@ -193,7 +193,6 @@ export default defineComponent({
     });
 
     function onSelectChange(selectedRowKeys: Array<string>) {
-      console.log("selectedRowKeys changed: ", selectedRowKeys);
       state.selectedRowKeys = selectedRowKeys;
     }
 
