@@ -2,37 +2,35 @@
   <a-layout id="components-layout-demo-custom-trigger">
     <a-layout-sider
       :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }"
-      v-model:collapsed="state.collapsed"
+      v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
     >
-      <div class="logo" @click="clear" />
-      <a-menu theme="dark" mode="inline" v-model:selectedKeys="state.selectedKeys">
-        <a-menu-item key="1" @click="toPage('/index/table', 'TableOne','表格')">
-          <user-outlined />表格
+      <div class="logo" />
+      <a-menu theme="dark" mode="inline" v-model:selectedKeys="state.activeKey">
+        <a-menu-item key="TableOne" @click="toPage('/index/table', 'TableOne','表格')">
+          <user-outlined />
+          <span v-if="!collapsed">表格</span>
         </a-menu-item>
-        <a-menu-item key="2" @click="toPage('/index/dashboard','dashboard','工作桌面')">
-          <video-camera-outlined />工作桌面
+        <a-menu-item key="keep" @click="toPage('/index/keep', 'keep','保持状态')">
+          <upload-outlined />
+          <span v-if="!collapsed">保持状态</span>
         </a-menu-item>
-        <a-menu-item key="3" @click="toPage('/index/keep', 'keep','保持状态')">
-          <upload-outlined />保持状态
-        </a-menu-item>
-        <a-menu-item v-for="(item, to) in routerCacheKeyArray" :key="to">{{item}}</a-menu-item>
       </a-menu>
     </a-layout-sider>
-    <a-layout :style="{ marginLeft: state.collapsed ?'80px':'200px' }">
+    <a-layout :style="{ marginLeft: collapsed ?'80px':'200px' }">
       <a-layout-header style="background: #fff; padding: 0">
         <a-row>
           <a-col :span="1">
             <menu-unfold-outlined
-              v-if="state.collapsed"
+              v-if="collapsed"
               class="trigger"
-              @click="() => (state.collapsed = !state.collapsed)"
+              @click="setCollapsed(false)"
             />
             <menu-fold-outlined
               v-else
               class="trigger"
-              @click="() => (state.collapsed = !state.collapsed)"
+              @click="setCollapsed(true)"
             />
           </a-col>
         </a-row>
@@ -46,8 +44,8 @@
         :style="{ margin: '24px 16px', 
                 padding: '24px', 
                 background: '#fff', 
-                minHeight: '88vh',
-                maxHeight: '88vh' ,
+                minHeight: '82vh',
+                maxHeight: '82vh' ,
                 'overflow-y': 'auto' }"
       >
         <div class="content">
@@ -63,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import routerTabs from "@/components/router-tabs/routerTabs.vue";
 import {
   UserOutlined,
@@ -76,9 +74,7 @@ import { useStore } from "vuex";
 
 interface StateObjectType {
   collapsed: boolean;
-  selectedKeys: Array<string>;
-  activeKey: string;
-  // routerCacheKeyArray: Array<string>;
+  activeKey: Array<string>;
 }
 
 import _ from "lodash";
@@ -97,19 +93,19 @@ export default defineComponent({
   setup() {
     const state: StateObjectType = reactive({
       collapsed: false,
-      selectedKeys: ["1"],
-      activeKey: "1",
+      activeKey: [],
     });
 
     const store = useStore();
     const router = useRouter();
-
-    onMounted(() => {
-      console.log(store);
-    });
-
+    console.log(store);
+    
     const routerCacheKeyArray = computed(() => {
       return store.state.routerCache.routerCacheKeyArray;
+    });
+
+    const collapsed = computed(() => {
+      return store.state.desktop.collapsed;
     });
 
     /**
@@ -117,29 +113,35 @@ export default defineComponent({
      */
     const setCache = (page: string, pageKey: string, name: string): void => {
       store.commit("routerCache/SET_ACTIVE_TAB_KEY", pageKey);
-      if (_.indexOf(store.state.routerCache.routerCacheKeyArray, pageKey) === -1) {
+      if (
+        _.indexOf(store.state.routerCache.routerCacheKeyArray, pageKey) === -1
+      ) {
         store.commit("routerCache/ADD_ROUTER_CACHE", {
           key: pageKey,
           name: name,
           path: page,
         });
-      } 
-      console.log(store.state.routerCache.activeTabKey);
+      }
     };
 
     /**
      * 路由跳转
      */
     const toPage = (page: string, pageKey: string, name: string): void => {
-      state.selectedKeys = [pageKey];
       setCache(page, pageKey, name);
       router.push(page);
+    };
+
+    const setCollapsed = (status: boolean): void => {
+      store.commit("desktop/SET_COLLAPSED_STATUS", status);
     };
 
     return {
       state,
       toPage,
       routerCacheKeyArray,
+      setCollapsed,
+      collapsed,
     };
   },
 });

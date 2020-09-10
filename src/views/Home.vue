@@ -4,7 +4,7 @@
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
 
     <div>
-      <router-link :to="'/index/table'">table</router-link>
+      <router-link :to="'/index/table'">跳转table页</router-link>
     </div>
     <div>
       <router-link :to="'/index/dashboard'">dashboard</router-link>
@@ -21,7 +21,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-import axios from "axios";
 import http from '../services/http/http';
 export default defineComponent({
   name: "Home",
@@ -31,7 +30,7 @@ export default defineComponent({
   methods: {
     test() {
       http
-        .post("/rest/portal/user/getUserByOpenId?openId=openId",{})
+        .get("/rest/portal/user/getUserByOpenId?openId=openId",{})
         .then(function (response) {
           console.log(response);
         })

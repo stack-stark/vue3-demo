@@ -15,7 +15,7 @@ interface StateFace {
 const state: StateFace = {
     routerCacheArray: [],
     routerCacheKeyArray: [],
-    activeTabKey: 'index'
+    activeTabKey: 'dashboard'
 }
 /**
  * getters相当于是state的计算属性，如果你需要将变量的值进行计算，然后输出，写这里
@@ -26,17 +26,6 @@ const getters = {
     },
     routerCacheKeyData(state: StateFace) {
         return state.routerCacheKeyArray
-    }
-}
-
-/**
- * 设置当前显示的tab key
- */
-const setActiveKey = () => {
-    if (state.routerCacheArray.length > 0) {
-        state.activeTabKey = state.routerCacheArray[length - 1]['key'];
-    } else {
-        state.activeTabKey = 'index';
     }
 }
 
@@ -52,7 +41,7 @@ const mutations = {
         _.pullAt(state.routerCacheKeyArray, index)
         const keyTemp = _.clone(state.routerCacheKeyArray)
         state.routerCacheKeyArray = keyTemp;
-        setActiveKey;
+        // setActiveKey();
     },
     SET_ACTIVE_TAB_KEY: (state: StateFace, key: string) => {
         state.activeTabKey = key;
@@ -62,6 +51,9 @@ const mutations = {
 const actions = {
     addrouterCache(commit: any, cache: RouterCacheObject) {
         commit('ADD_ROUTER_CACHE', cache)
+    },
+    claearRouterCache(commit: any, index: number) {
+        commit('CLEAR_ROUTER_CACHE', index)
     },
     clearErrorLog(commit: any) {
         commit('CLEAR_ROUTER_CACHE')

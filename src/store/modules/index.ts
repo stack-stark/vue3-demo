@@ -1,3 +1,5 @@
-import routerCache from './router-cache'
+import routerCache from './router-cache';
 
-export default { routerCache }
+import desktop from './desktop';
+
+export default { routerCache, desktop }
