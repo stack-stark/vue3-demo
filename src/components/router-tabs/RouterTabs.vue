@@ -132,7 +132,11 @@ export default defineComponent({
      * 监听滚轮
      */
     const tabMousewheel = (e: WheelDelta) => {
-      const dom = document.getElementById("tabs");
+      const length = store.state.routerCache.routerCacheArray.length;
+      if (length < 12) { //小于12个tab不处理
+        return false;
+      }
+      const dom: HTMLElement | null = document.getElementById("tabs");
       if (!dom) {
         return false;
       }

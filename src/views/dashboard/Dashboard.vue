@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div v-if="state.show">
-      <!-- <keep-alive>
-          
-      </keep-alive> -->
-       <a-input v-model:value="state.value" placeholder="Basic usage" />
-    </div>
-    <a-button type="primary" @click="state.show = !state.show">Primary</a-button>
+    工作桌面
   </div>
 </template>
 
@@ -18,7 +12,6 @@ export default defineComponent({
   setup() {
     const state = reactive({
       show: true,
-      value: "",
     });
     return {
       state,

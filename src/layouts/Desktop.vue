@@ -16,22 +16,18 @@
           <upload-outlined />
           <span v-if="!collapsed">保持状态</span>
         </a-menu-item>
+           <a-menu-item key="role" @click="toPage('/index/role', 'role','角色管理')">
+          <upload-outlined />
+          <span v-if="!collapsed">角色管理</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout :style="{ marginLeft: collapsed ?'80px':'200px' }">
       <a-layout-header style="background: #fff; padding: 0">
         <a-row>
           <a-col :span="1">
-            <menu-unfold-outlined
-              v-if="collapsed"
-              class="trigger"
-              @click="setCollapsed(false)"
-            />
-            <menu-fold-outlined
-              v-else
-              class="trigger"
-              @click="setCollapsed(true)"
-            />
+            <menu-unfold-outlined v-if="collapsed" class="trigger" @click="setCollapsed(false)" />
+            <menu-fold-outlined v-else class="trigger" @click="setCollapsed(true)" />
           </a-col>
         </a-row>
       </a-layout-header>
@@ -40,14 +36,7 @@
       <routerTabs />
       <!-- 路由缓存选项卡 -->
 
-      <a-layout-content
-        :style="{ margin: '24px 16px', 
-                padding: '24px', 
-                background: '#fff', 
-                minHeight: '82vh',
-                maxHeight: '82vh' ,
-                'overflow-y': 'auto' }"
-      >
+      <a-layout-content :class="'layout-content'">
         <div class="content">
           <router-view v-slot="{ Component }">
             <keep-alive :include="routerCacheKeyArray">
@@ -99,7 +88,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     console.log(store);
-    
+
     const routerCacheKeyArray = computed(() => {
       return store.state.routerCache.routerCacheKeyArray;
     });
@@ -164,5 +153,26 @@ export default defineComponent({
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 6px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #d2d2d2;
+}
+.layout-content {
+  margin: 24px 16px;
+  padding: 24px;
+  background: #fff;
+  height: 82vh;
+  overflow-y: auto;
 }
 </style>

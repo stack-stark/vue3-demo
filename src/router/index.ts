@@ -8,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
   },
   {
+    path: '/login',
+    component: () => import('@/views/user/login.vue'),
+    name: 'login',
+  },
+  {
     path: '/404',
     component: () => import('@/views/system-status-pages/notFound.vue'),
     name: 'notFound',
@@ -46,6 +51,14 @@ const routes: Array<RouteRecordRaw> = [
         path: 'keep',
         component: () => import('@/views/dashboard/keep.vue'),
         name: 'keep',
+        meta:{
+          keepAlive: true
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/system/role.vue'),
+        name: 'role',
         meta:{
           keepAlive: true
         }
