@@ -43,6 +43,10 @@ http.interceptors.response.use(
     },
     error => { // http请求错误抛出的异常
         Store.commit('appGlobal/SET_LOADING_STATUS', false)
+        if(!error.response) {
+            message.error("网络请求错误！");
+            return Promise.reject('network error or server error')
+        }
         console.error(error.response)
         switch (error.response.status) {
             case 401:

@@ -16,7 +16,7 @@
           <upload-outlined />
           <span v-if="!collapsed">保持状态</span>
         </a-menu-item>
-           <a-menu-item key="role" @click="toPage('/index/role', 'role','角色管理')">
+        <a-menu-item key="role" @click="toPage('/index/role', 'role','角色管理')">
           <upload-outlined />
           <span v-if="!collapsed">角色管理</span>
         </a-menu-item>
@@ -29,7 +29,14 @@
             <menu-unfold-outlined v-if="collapsed" class="trigger" @click="setCollapsed(false)" />
             <menu-fold-outlined v-else class="trigger" @click="setCollapsed(true)" />
           </a-col>
+          <a-col :span="4" :offset="19">
+            <setConfig />
+          </a-col>
         </a-row>
+
+        <!-- 设置抽屉 -->
+        
+        <!-- 设置抽屉 -->
       </a-layout-header>
 
       <!-- 路由缓存选项卡 -->
@@ -51,7 +58,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, reactive } from "vue";
-import routerTabs from "@/components/router-tabs/routerTabs.vue";
+import routerTabs from "./router-tabs/router-tabs.vue";
+import openRouter from "@/services/open-router/open-router";
+import setConfig from "./set-config/set-config.vue";
+
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -63,11 +73,9 @@ import { useStore } from "vuex";
 
 interface StateObjectType {
   collapsed: boolean;
+  showConfigDrawer: boolean;
   activeKey: Array<string>;
 }
-
-import _ from "lodash";
-import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -77,50 +85,46 @@ export default defineComponent({
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     routerTabs,
+    setConfig,
   },
 
   setup() {
     const state: StateObjectType = reactive({
       collapsed: false,
       activeKey: [],
+      showConfigDrawer: false,
     });
 
     const store = useStore();
-    const router = useRouter();
-    console.log(store);
 
+    /**
+     * 已缓存路由数组
+     */
     const routerCacheKeyArray = computed(() => {
       return store.state.routerCache.routerCacheKeyArray;
     });
 
+    /**
+     * 菜单栏状态
+     */
     const collapsed = computed(() => {
       return store.state.desktop.collapsed;
     });
 
     /**
-     * 设置路由缓存
+     * 路由跳转
      */
-    const setCache = (page: string, pageKey: string, name: string): void => {
-      store.commit("routerCache/SET_ACTIVE_TAB_KEY", pageKey);
-      if (
-        _.indexOf(store.state.routerCache.routerCacheKeyArray, pageKey) === -1
-      ) {
-        store.commit("routerCache/ADD_ROUTER_CACHE", {
-          key: pageKey,
-          name: name,
-          path: page,
-        });
-      }
+    const toPage = (
+      pagePath: string,
+      pageKey: string,
+      tabTitle: string
+    ): void => {
+      openRouter(pagePath, pageKey, tabTitle, true, 1);
     };
 
     /**
-     * 路由跳转
+     * 收缩菜单栏
      */
-    const toPage = (page: string, pageKey: string, name: string): void => {
-      setCache(page, pageKey, name);
-      router.push(page);
-    };
-
     const setCollapsed = (status: boolean): void => {
       store.commit("desktop/SET_COLLAPSED_STATUS", status);
     };

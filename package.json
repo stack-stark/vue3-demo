@@ -1,5 +1,5 @@
 {
-  "name": "vue3-demo",
+  "name": "miniadmin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,8 +12,10 @@
     "ant-design-vue": "^2.0.0-beta.3",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "dayjs": "^1.8.35",
     "js-cookie": "^2.2.1",
     "vue": "^3.0.0-0",
+    "vue-i18n": "^9.0.0-beta.1",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
@@ -29,6 +31,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0-0",
     "@vue/eslint-config-typescript": "^5.0.2",
+    "antd-dayjs-webpack-plugin": "^1.0.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "less": "^3.0.4",

@@ -19,7 +19,7 @@
       @click="toPage(item.path, item.key)"
       v-bind:class="{ 'tabs-item-active': activeKey == item.key }"
     >
-      <span class="item-span">{{item.name}}</span>
+      <span class="item-span">{{item.tabTitle}}</span>
       <span @click.stop="closeTab(index, item.path)">
         <CloseOutlined />
       </span>

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
+const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin');
 module.exports = {
   devServer: {
     proxy: {
@@ -23,6 +24,11 @@ module.exports = {
   // publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   //打包输出目录
   outputDir: process.env.NODE_ENV !== 'production' ? 'development' : 'dist',
+
+  configureWebpack: config => {
+    config.plugins.push(new AntdDayjsWebpackPlugin()); // 替换momentjs
+  },
+
   chainWebpack(config) {
     // 忽略/moment/locale下的所有文件
     config
@@ -37,6 +43,8 @@ module.exports = {
             .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
         }
       );
+    // config.plugins
+
     config.plugins.delete('prefetch') //去除预加载,见https://cli.vuejs.org/zh/guide/html-and-static-assets.html#prefetch
     //提取公共js
     config.optimization.splitChunks({

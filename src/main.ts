@@ -5,6 +5,7 @@ import store from './store'
 
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import i18n from './i18n';
 
 const app = createApp(App);
-app.use(store).use(Antd).use(router).mount('#app')
+app.use(store).use(router).use(Antd).use(i18n).mount('#app')

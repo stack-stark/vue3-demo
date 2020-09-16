@@ -22,14 +22,14 @@
 
  - [x] 4.antd引入
 
- - [] 5.http请求封装
+ - [x] 5.http请求封装
 
  - [x] 6.状态页(404, 500...)
 
  - [ ] 7.登录页
 
 
-## 开发时需要封装的组件or功能
+## 需要封装的组件or功能
 
  - [X] 1.路由tab缓存
 
@@ -43,7 +43,40 @@
 
  - [] 6.打包可接受主题色参数
 
- - [] 7.多语言
+ - [X] 7.多语言支持
 
  - [] 8.message封装
 
+ - [] 9.树形组件
+
+## 多语言
+1.在`src\i18n\languages`对应的语言文件下配置相关文案,
+``` ts
+// enUS.ts
+export const enUS = {
+    named: 'named',
+}
+
+// zhCN.ts
+export const zhCN = {
+    named: '姓名',
+}
+
+// zhTW.ts
+export const zhTW = {
+    named: '姓名',
+}
+```
+
+2.在页面中使用
+``` html
+<div>
+  {{ $t("named") }}
+</div>
+<!-- 或者 -->
+<i18n-t keypath="named">
+    <template #name>
+        <span>姓名</span>
+    </template>
+</i18n-t>
+```

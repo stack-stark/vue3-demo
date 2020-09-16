@@ -1,22 +1,35 @@
 <template>
-  <div id="app">
-    <router-view />
-    <div id="js-loading" class="globalSpin" v-if="loading">
-      <div class="box">
-        <div class="loader-01"></div>
-        <div class="tip-text">加载中...</div>
+  <a-config-provider :locale="locale">
+    <div id="app">
+      <router-view />
+      <div id="js-loading" class="globalSpin" v-if="loading">
+        <div class="box">
+          <div class="loader-01"></div>
+          <div class="tip-text">{{$t('sysPrompt.dataLoading')}}</div>
+        </div>
       </div>
     </div>
-  </div>
+  </a-config-provider>
 </template>
 
 <script  lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import zhTW from "ant-design-vue/es/locale/zh_TW";
+import enUS from "ant-design-vue/es/locale/en_US";
+
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   setup() {
     const spinning = ref(true);
+    const langs = ref({
+      zhCN: zhCN,
+      zhTW: zhTW,
+      enUS: enUS,
+    });
+    const i18n = useI18n();
 
     const store = useStore();
 
@@ -24,9 +37,15 @@ export default defineComponent({
       return store.state.appGlobal.loading;
     });
 
+    const locale = computed(() => {
+      return langs.value[i18n.locale.value];
+    });
+
     return {
       loading,
       spinning,
+      langs,
+      locale,
     };
   },
 });
@@ -110,7 +129,7 @@ export default defineComponent({
     transform: rotate(360deg);
   }
 }
-.tip-text{
+.tip-text {
   color: #404040;
   font-size: 14px;
 }

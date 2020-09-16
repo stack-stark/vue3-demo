@@ -41,13 +41,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 
 export default defineComponent({
   name: "superTableSearch",
   props: ["controlArray"],
   setup(props, context) {
-    const controlArrays = ref(props.controlArray);
     const searchForm = ref({
       roleName: "",
       roleKey: "",
@@ -62,8 +61,12 @@ export default defineComponent({
         context.emit("tablesearch", searchForm);
     }
 
+    watch(props,(newValue, oldValue) =>{
+      console.log(newValue);
+      console.log(oldValue);
+    })
+
     return {
-      controlArrays,
       searchForm,
       labelCol,
       wrapperCol,
